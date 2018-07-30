@@ -176,14 +176,13 @@ class Function_Helper:
         parser.add_argument('--zip', '-z')
         parser.add_argument('--days', '-d')
 
+        help_text = 'View weather for a location\n\nParameters:\n\nRequired:\n-z, --zip\tPostcode/Zipcode\nor\n-c, --city\tCity name\n\nOptional:\n-t, --type\tSupply forecast for n day forecast\n-d, --days\tAmount of days forecast (up to 5)'
 
-
-        namespace_object = 'help'
         try:
             namespace_object = parser.parse_args(params.split())
             print(namespace_object)
         except SystemExit:
-            return [namespace_object, None]
+            return [help_text, None]
 
         #Build url
         api_key = self.tokens['OpenWeatherMap']['api_key']
@@ -199,7 +198,7 @@ class Function_Helper:
         elif namespace_object.city:
             dest = 'q=' + namespace_object.city + ',de'
         else:
-            return ['Not enough arguments supplied', None]
+            return [help_text, None]
 
         url = base_url + endpoint + '?' + dest + '&units=metric&APPID=' + api_key
         print(url)
@@ -207,7 +206,7 @@ class Function_Helper:
         #Api request
         response = requests.get(url)
 
-        print(response.content)
+        #print(response.content)
 
         response_json = response.json()
 
@@ -225,12 +224,12 @@ class Function_Helper:
 
             #Limit amount of days
             if namespace_object.days:
-                limit = int(namespace_object.days)
+                limit = float(namespace_object.days)
             else:
                 limit = 1
 
             #there is one entry per 3 hours -> 8 entries per day
-            amt_entries = limit * 8
+            amt_entries = int(limit * 8)
 
             #Place
             text += 'Weather forecast for ' + response_json['city']['name'] + '\n\n'
