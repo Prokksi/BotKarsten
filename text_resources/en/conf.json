@@ -1,0 +1,198 @@
+{
+  "reactions": {
+    "dummy": {
+      "matches": [
+        {
+          "keys": [
+            "hello there"
+          ],
+          "type": "exact"
+        }
+      ],
+      "responses": {
+        "default": {
+          "type": "text",
+          "values": [
+            "General Kenobi..."
+          ]
+        }
+      }
+    },
+    "01da77cf-5c86-4982-82c4-0e7f680cbab6": {
+      "matches": [
+        {
+          "keys": [
+            "i have the high ground"
+          ],
+          "type": "exact"
+        }
+      ],
+      "responses": {
+        "default": {
+          "values": [
+            "You are underestimating my powers"
+          ],
+          "type": "text"
+        }
+      }
+    },
+    "dummy2": {
+      "matches": [
+        {
+          "keys": [
+            "hi",
+            "hello",
+            "greetings",
+            "yo",
+            "meddl",
+            "hey"
+          ],
+          "type": "key",
+          "required_hits": 1
+        }
+      ],
+      "responses": {
+        "default": {
+          "type": "text",
+          "values": [
+            "Hi there USERNAME",
+            "Hey ho USERNAME",
+            "Meddl",
+            "Hello USERNAME"
+          ]
+        },
+        "UBJEP0YLS": {
+          "type": "text",
+          "values": [
+            "Nice to see you, dude"
+          ]
+        }
+      }
+    },
+    "dummy3": {
+      "matches": [
+        {
+          "keys": [
+            "raspberry",
+            "pi"
+          ],
+          "must_hit": [
+            "shutdown"
+          ],
+          "type": "key",
+          "required_hits": 1
+        },
+        {
+          "keys": [
+            "shutdown raspberrypi now"
+          ],
+          "type": "exact"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "self_shutdown",
+          "type": "action"
+        }
+      }
+    },
+    "dummy6": {
+      "matches": [
+        {
+          "pattern": "teach reaction",
+          "type": "command"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "teach_reaction",
+          "type": "action"
+        }
+      }
+    },
+    "dummy42": {
+      "matches": [
+        {
+          "keys": [
+            "did you ever hear the tragedy of darth plagueis the wise"
+          ],
+          "type": "exact"
+        },
+        {
+          "keys": [
+            "plagueis",
+            "tragedy",
+            "wise",
+            "darth"
+          ],
+          "type": "key",
+          "required_hits": 2
+        }
+      ],
+      "responses": {
+        "default": {
+          "values": [
+            "Did you ever hear the tragedy of Darth Plagueis the wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic, he could save others from death, but not himself."
+          ],
+          "type": "text"
+        }
+      }
+    },
+    "dummy4": {
+      "matches": [
+        {
+          "keys": [
+            "Marco"
+          ],
+          "type": "exact"
+        }
+      ],
+      "responses": {
+        "default": {
+          "type": "text",
+          "values": [
+            "Polo"
+          ]
+        }
+      }
+    },
+    "dummy5": {
+      "matches": [
+        {
+          "pattern": "give meme",
+          "type": "command"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "get_meme",
+          "type": "action"
+        }
+      }
+    },
+    "dummy7": {
+      "matches": [
+        {
+          "pattern": "save meme",
+          "type": "command"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "save_meme",
+          "type": "action"
+        }
+      }
+    }
+  },
+  "no_reaction": [
+    "Sorry, I do not understand :/"
+  ],
+  "greetings": [
+    "Meddl Loide",
+    "It's just me, Karsten",
+    "AND HIS NAME IS KARSTEN",
+    "Guten Morgen Herr Nachbar",
+    "Hello, Friends"
+  ]
+}
