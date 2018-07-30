@@ -8,6 +8,6 @@
 - apiclient.discovery (Google CSE)
 
 
-### Installation
-sudo pip install slackclient
-sudo pip install --upgrade google-api-python-client
+### Installation <br>
+sudo pip install slackclient <br>
+sudo pip install --upgrade google-api-python-client <br>
