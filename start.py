@@ -1,3 +1,10 @@
+import sys
+
+#Add utilities folder to sys path
+if not './utilities' in sys.path:
+  sys.path.append('./utilities')
+
+
 from utilities.Bot import Bot
 from configparser import ConfigParser    
 
