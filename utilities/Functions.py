@@ -181,8 +181,11 @@ class Function_Helper:
         try:
             namespace_object = parser.parse_args(params.split())
             print(namespace_object)
+
+        #Prevents parser from exiting script
         except SystemExit:
             return [help_text, None]
+
 
         #Build url
         api_key = self.tokens['OpenWeatherMap']['api_key']
@@ -205,13 +208,12 @@ class Function_Helper:
 
         #Api request
         response = requests.get(url)
-
+        response_json = response.json()
         #print(response.content)
 
-        response_json = response.json()
 
+        #Build response (maybe use attachments and/or slack message formatting?)
         text = ''
-
         if endpoint == 'weather':
             text += 'Current weather for ' + response_json['name'] + '\n'
             text += 'Description: ' +  response_json['weather'][0]['description'] + '\n'
@@ -230,13 +232,12 @@ class Function_Helper:
 
             #there is one entry per 3 hours -> 8 entries per day
             amt_entries = int(limit * 8)
+            flist = response_json['list']
+            #reduce list
+            flist = flist[:amt_entries]
 
             #Place
             text += 'Weather forecast for ' + response_json['city']['name'] + '\n\n'
-            flist = response_json['list']
-
-            #reduce list
-            flist = flist[:amt_entries]
 
             for entry in flist:
                 text += time.strftime("%d %b %Y %H:%M:%S %Z", time.localtime(entry['dt'])) + '\n'
