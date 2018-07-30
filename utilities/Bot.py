@@ -6,13 +6,12 @@ import sys
 from random import randint
 import platform
 from Functions import Function_Helper
-import re
 
 class Bot:
 
     #bot variables
 
-    #not changeble
+    #not changeable
     BOT_NAME = ''
     TOKEN = ''
     DM = 'D'
@@ -22,7 +21,6 @@ class Bot:
     ICON = ':penguin:'
 
     #placeholders
-    #USERNAME = 'USERNAME'
     placeholders = ['USERNAME']
 
     #can change
@@ -76,20 +74,6 @@ class Bot:
         self.function_helper = Function_Helper()
 
 
-    def send_image(self):
-        self.slack_connection.api_call(
-            "chat.postMessage",
-            channel=self.default_channel,
-            text='Test',
-            icon_emoji=self.ICON,
-            attachments=[
-                {
-                    "fallback": "Required plain-text summary of the attachment.",
-                    "image_url": "https://i.imgflip.com/1qqazl.jpg"
-                }
-            ]
-        )
-
 
     def connect(self, channel=None):
 
@@ -107,56 +91,61 @@ class Bot:
         for member in members:
             if member['name'] == self.BOT_NAME:
                 own_user_id = member['id']
-                print(own_user_id)
+                #print(own_user_id)
                 break
+        else:
+            print('Error: Bot user not in members')
+            sys.exit(1)
 
-        if not own_user_id:
-            print('Bot user not in members')
-            sys.exit()
         self.OWN_USER_ID = own_user_id
 
 
         #Hello message
         greetings = self.text_conf['greetings']
-        text = greetings[randint(0, len(greetings) - 1)]
+        text = self.get_random(greetings)
         self.send_message(text, None, channel)
 
+        print('connected...')
 
 
     def listen(self, all_messages=False):
 
+        if not self.slack_connection:
+            print('Error: No slack connection established')
+            sys.exit(1)
+
         sc = self.slack_connection
 
         #start rtm
-        print('Try RTM listening...')
+        print('trying RTM listening...')
         if sc.rtm_connect(with_team_state=False):
             #wait for slack hello message
 
             while True:
                 response = sc.rtm_read()
-                #print(response)
-
 
                 if response:
                     msg = response[0]
                     type = msg['type']
+
                     if type != 'hello':
-                        print('RTM Connection failed')
+                        print('Error: RTM connection failed')
                         sys.exit(1)
-                    print('RTM Connection successful')
+
+                    print('RTM connection successful!')
                     break
+
                 time.sleep(1)
 
 
 
 
             #start listening
-            print('Waiting for user messages...')
+            print('waiting for user messages...')
             while True:
                 response = sc.rtm_read()
                 if response:
                     try:
-                        #print(response)
                         for msg in response:
 
                             #Ignore everything but user text messages
@@ -190,7 +179,6 @@ class Bot:
                                     response = self.apply_command(cmd_reaction_id, text, user)
 
                                 else:
-
                                     text_clean = self.clean_message(text, bot_mentioned)
                                     print('Message after cleaning: ' + text_clean)
 
@@ -217,7 +205,8 @@ class Bot:
                 time.sleep(1)
 
         else:
-            print("RTM Connection failed")
+            print("Error: RTM connection failed")
+            sys.exit(1)
 
 
 
@@ -237,7 +226,7 @@ class Bot:
 
         if channel_type == self.CHANNEL:
             if not bot_mentioned:
-                print('Not mentioned in channel message - skipping')
+                print('not mentioned in channel message - skipping...')
                 #channel + not mentioned
                 return (False, False)
 
@@ -303,22 +292,21 @@ class Bot:
                 type = match['type']
 
                 if type == 'exact':
-                    print('exact')
+                    #print('exact')
                     for key in match['keys']:
                         if key.lower() == text:
-                            print('exact hit')
+                            #print('exact hit')
                             exact_hits += 1
 
                             #Acknowledge that response is qualified
                             reaction_accepted = True
 
 
-
                 elif type == 'key':
-                    print('key')
+                    #print('key')
                     for key in match['keys']:
                         if key in text and self.is_separated(text, key):
-                            print('key hit')
+                            #print('key hit')
                             key_hits += 1
 
                     if key_hits >= match['required_hits']:
@@ -353,7 +341,6 @@ class Bot:
     def find_best_reaction(self, possible_reactions):
         chosen_reaction = None
         for possible_reaction in possible_reactions:
-            #print(possible_reaction)
             if chosen_reaction is None:
                 chosen_reaction = possible_reaction
             else:
@@ -379,9 +366,7 @@ class Bot:
             response_text = self.get_random(values)
         elif response['type'] == 'action':
             function_name = response['function']
-            print(function_name)
             response_text = getattr(self.function_helper, function_name)()
-            print(response_text)
 
         return [response_text, None]
 
@@ -408,9 +393,6 @@ class Bot:
             reaction = reactions[reaction_id]
             matches = reaction['matches']
 
-            #get command
-
-
             for match in matches:
                 if match['type'] == 'command':
                     #check if command fits
@@ -418,13 +400,12 @@ class Bot:
                         #save id
                         return reaction_id
 
-
                     #Ignore all other matches of this reaction
                     #(only one command pattern per reaction)
                     break
 
-
         return None
+
 
     def apply_command(self, reaction_id, text, user):
 
@@ -445,10 +426,7 @@ class Bot:
             response = responses['default']
 
         function_name = response['function']
-        print(function_name)
         response = getattr(self.function_helper, function_name)(self, cmd, text)
-        print(response)
-
 
         return response
 
@@ -478,6 +456,7 @@ class Bot:
 
     def replace_placeholders(self, text, replacements):
         for i in range(0, len(self.placeholders)):
+            #TODO: use split + join to enable multiple replacements
             text = text.replace(self.placeholders[i], replacements[i])
 
         return text
