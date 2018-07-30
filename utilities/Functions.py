@@ -150,3 +150,12 @@ class Function_Helper:
             json.dump(bot.image_library, f)
 
         return ['Image successfully added', None]
+
+
+    def give_subreddit(self, bot, cmd, text):
+
+        param = text.replace(cmd, '')
+        param = param.strip()
+
+        url = 'https://www.reddit.com/r/' + param
+        return [url, None]

@@ -11,10 +11,24 @@
       ],
       "responses": {
         "default": {
-          "type": "text",
           "values": [
             "General Kenobi..."
-          ]
+          ],
+          "type": "text"
+        }
+      }
+    },
+    "dummy7": {
+      "matches": [
+        {
+          "pattern": "save meme",
+          "type": "command"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "save_meme",
+          "type": "action"
         }
       }
     },
@@ -29,10 +43,24 @@
       ],
       "responses": {
         "default": {
+          "type": "text",
           "values": [
             "You are underestimating my powers"
-          ],
-          "type": "text"
+          ]
+        }
+      }
+    },
+    "f18e1891-7db0-4fb1-aaf4-875d62e101af": {
+      "matches": [
+        {
+          "pattern": "give subreddit",
+          "type": "command"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "give_subreddit",
+          "type": "action"
         }
       }
     },
@@ -53,19 +81,19 @@
       ],
       "responses": {
         "default": {
-          "type": "text",
           "values": [
             "Hi there USERNAME",
             "Hey ho USERNAME",
             "Meddl",
             "Hello USERNAME"
-          ]
+          ],
+          "type": "text"
         },
         "UBJEP0YLS": {
-          "type": "text",
           "values": [
             "Nice to see you, dude"
-          ]
+          ],
+          "type": "text"
         }
       }
     },
@@ -131,10 +159,10 @@
       ],
       "responses": {
         "default": {
+          "type": "text",
           "values": [
             "Did you ever hear the tragedy of Darth Plagueis the wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic, he could save others from death, but not himself."
-          ],
-          "type": "text"
+          ]
         }
       }
     },
@@ -149,10 +177,10 @@
       ],
       "responses": {
         "default": {
-          "type": "text",
           "values": [
             "Polo"
-          ]
+          ],
+          "type": "text"
         }
       }
     },
@@ -166,20 +194,6 @@
       "responses": {
         "default": {
           "function": "get_meme",
-          "type": "action"
-        }
-      }
-    },
-    "dummy7": {
-      "matches": [
-        {
-          "pattern": "save meme",
-          "type": "command"
-        }
-      ],
-      "responses": {
-        "default": {
-          "function": "save_meme",
           "type": "action"
         }
       }

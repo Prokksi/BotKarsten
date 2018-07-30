@@ -168,6 +168,12 @@ class Bot:
                                 print('Message from: ' + user_name)
 
 
+                                if bot_mentioned:
+                                    to_replace = '<@' + self.OWN_USER_ID + '>'
+                                    text = text.replace( to_replace, '')
+                                    text = text.strip()
+
+
                                 #initialize reponse
                                 response = [None, None]
                                 #response[0] = None   #this is for the text
@@ -244,9 +250,9 @@ class Bot:
 
 
     def clean_message(self, message, bot_mentioned):
-        if bot_mentioned:
-            to_replace = '<@' + self.OWN_USER_ID + '>'
-            message = message.replace( to_replace, '')
+        # if bot_mentioned:
+        #     to_replace = '<@' + self.OWN_USER_ID + '>'
+        #     message = message.replace( to_replace, '')
 
         #remove unwanted characters
         replace_list = ['.', ',', '!', '?']
