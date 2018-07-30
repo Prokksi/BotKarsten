@@ -197,6 +197,20 @@
           "type": "action"
         }
       }
+    },
+    "01da77cf-5c86-4982-82c4-0e7f680cbab1": {
+      "matches": [
+        {
+          "pattern": "weather",
+          "type": "command"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "find_weather",
+          "type": "action"
+        }
+      }
     }
   },
   "no_reaction": [

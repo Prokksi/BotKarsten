@@ -3,6 +3,9 @@ import json
 import uuid
 from apiclient.discovery import build
 from configparser import ConfigParser
+import requests
+import argparse
+import time
 
 class Function_Helper:
 
@@ -159,3 +162,88 @@ class Function_Helper:
 
         url = 'https://www.reddit.com/r/' + param
         return [url, None]
+
+
+    def find_weather(self, bot, cmd, text):
+
+        params = text.replace(cmd, '')
+        params = params.strip()
+
+        #Pattern: weather [--type][--city or --zip]
+        parser = argparse.ArgumentParser(description='Weather api arguments')
+        parser.add_argument('--type', '-t')
+        parser.add_argument('--city', '-c')
+        parser.add_argument('--zip', '-z')
+        parser.add_argument('--days', '-d')
+
+
+
+        namespace_object = 'help'
+        try:
+            namespace_object = parser.parse_args(params.split())
+            print(namespace_object)
+        except SystemExit:
+            return [namespace_object, None]
+
+        #Build url
+        api_key = self.tokens['OpenWeatherMap']['api_key']
+        base_url = 'http://api.openweathermap.org/data/2.5/'
+
+        if namespace_object.type:
+            endpoint = namespace_object.type
+        else:
+            endpoint = 'weather'
+
+        if namespace_object.zip:
+            dest = 'zip=' + namespace_object.zip + ',de'
+        elif namespace_object.city:
+            dest = 'q=' + namespace_object.city + ',de'
+        else:
+            return ['Not enough arguments supplied', None]
+
+        url = base_url + endpoint + '?' + dest + '&units=metric&APPID=' + api_key
+        print(url)
+
+        #Api request
+        response = requests.get(url)
+
+        print(response.content)
+
+        response_json = response.json()
+
+        text = ''
+
+        if endpoint == 'weather':
+            text += 'Current weather for ' + response_json['name'] + '\n'
+            text += 'Description: ' +  response_json['weather'][0]['description'] + '\n'
+            text += 'Mean Temperature: ' + str(response_json['main']['temp']) + '\n'
+            text += 'Min Temperature: ' + str(response_json['main']['temp_min']) + '\n'
+            text += 'Max Temperature: ' + str(response_json['main']['temp_max']) + '\n\n'
+
+
+        elif endpoint == 'forecast':
+
+            #Limit amount of days
+            if namespace_object.days:
+                limit = int(namespace_object.days)
+            else:
+                limit = 1
+
+            #there is one entry per 3 hours -> 8 entries per day
+            amt_entries = limit * 8
+
+            #Place
+            text += 'Weather forecast for ' + response_json['city']['name'] + '\n\n'
+            flist = response_json['list']
+
+            #reduce list
+            flist = flist[:amt_entries]
+
+            for entry in flist:
+                text += time.strftime("%d %b %Y %H:%M:%S %Z", time.localtime(entry['dt'])) + '\n'
+                text += 'Description: ' +  entry['weather'][0]['description'] + '\n'
+                text += 'Mean Temperature: ' + str(entry['main']['temp']) + '\n'
+                text += 'Min Temperature: ' + str(entry['main']['temp_min']) + '\n'
+                text += 'Max Temperature: ' + str(entry['main']['temp_max']) + '\n\n'
+
+        return [text, None]
