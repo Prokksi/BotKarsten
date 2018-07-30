@@ -1,6 +1,6 @@
 # BotKarsten
 
-###Required Python packages
--configparser
--slackclient
--apiclient.discovery (Google CSE)
+### Required Python packages
+- configparser
+- slackclient
+- apiclient.discovery (Google CSE)
