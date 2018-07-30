@@ -2,8 +2,21 @@ import os
 import json
 import uuid
 from apiclient.discovery import build
+from configparser import ConfigParser
 
 class Function_Helper:
+
+    tokens = None
+
+    def __init__(self):
+
+        #Read tokens from config
+        tokens = ConfigParser()
+        tokens.read('config/tokens.ini')
+
+        self.tokens = tokens
+
+
 
     #define custom functions in here
 
@@ -42,12 +55,15 @@ class Function_Helper:
         if image_url:
             return ['', [{"fallback": "spicy meme", "image_url": image_url }]]
 
-        
+
         #just do a google image search, lol
-        service = build("customsearch", "v1", developerKey="")
+        developer_key = self.tokens['Google']['developer_key']
+        cx = self.tokens['Google']['custom_search1']
+
+        service = build("customsearch", "v1", developerKey=developer_key)
         res = service.cse().list(
             q=params,
-            cx='',
+            cx=cx,
             searchType='image',
             num=1,
             #imgType='clipart',
@@ -62,8 +78,8 @@ class Function_Helper:
 
             return ['', [{"fallback": "spicy meme", "image_url": link }]]
 
-        
-        #Well, when nothong helps, do this        
+
+        #Well, when nothong helps, do this
         return ['No image with your keywords found, sorry buddy', None]
 
 
