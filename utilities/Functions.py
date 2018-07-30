@@ -205,6 +205,7 @@ class Function_Helper:
 
         url = base_url + endpoint + '?' + dest + '&units=metric&APPID=' + api_key
         print(url)
+        
 
         #Api request
         response = requests.get(url)
