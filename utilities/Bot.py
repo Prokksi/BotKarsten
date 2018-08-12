@@ -170,7 +170,7 @@ class Bot:
 
                                 if bot_mentioned:
                                     to_replace = '<@' + self.OWN_USER_ID + '>'
-                                    text = text.replace( to_replace, '')
+                                    text = text.replace(to_replace, '')
                                     text = text.strip()
 
 
@@ -185,7 +185,7 @@ class Bot:
                                     response = self.apply_command(cmd_reaction_id, text, user)
 
                                 else:
-                                    text_clean = self.clean_message(text, bot_mentioned)
+                                    text_clean = self.clean_message(text)
                                     print('Message after cleaning: ' + text_clean)
 
                                     possible_reactions = self.match_reactions(text_clean)
@@ -249,11 +249,8 @@ class Bot:
 
 
 
-    def clean_message(self, message, bot_mentioned):
-        # if bot_mentioned:
-        #     to_replace = '<@' + self.OWN_USER_ID + '>'
-        #     message = message.replace( to_replace, '')
-
+    def clean_message(self, message):
+    
         #remove unwanted characters
         replace_list = ['.', ',', '!', '?']
         for c in replace_list:
