@@ -49,7 +49,7 @@ class Bot:
         self.BOT_NAME = bot_name
         self.TOKEN = token
         self.language = language
-        self.default_channel = '#allgemein'
+        self.default_channel = default_channel
 
         if home_dir:
             self.home_dir = home_dir
