@@ -202,7 +202,7 @@ class Function_Helper:
         #Clean
         #keys = namespace_object.tags.split(',')
         #keys = [key.strip() for key in keys]
-        keys = namespace_object.tags.join().split(',')
+        keys = ' '.join(namespace_object.tags).split(',')
         print(keys)
         
         try:
@@ -212,7 +212,7 @@ class Function_Helper:
 
         #responses = namespace_object.responses.split(',')
         #responses = [key.strip() for response in responses]
-        responses = namespace_object.responses
+        responses = ' '.join(namespace_object.responses).split(',')
 
         
         #Build json
