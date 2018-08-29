@@ -64,6 +64,20 @@
         }
       }
     },
+    "55ec4374-70cf-4234-9389-bfea8a1e60da": {
+      "matches": [
+        {
+          "pattern": "give image",
+          "type": "command"
+        }
+      ],
+      "responses": {
+        "default": {
+          "function": "get_image",
+          "type": "action"
+        }
+      }
+    },
     "dummy2": {
       "matches": [
         {

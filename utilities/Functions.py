@@ -25,11 +25,11 @@ class Function_Helper:
 
     #SIMPLE ACTIONS
 
-    def self_shutdown(self):
-
-        os.system('shutdown -h now')
-
-        return 'Bye, bye'
+    # def self_shutdown(self):
+    #
+    #     os.system('shutdown -h now')
+    #
+    #     return 'Bye, bye'
 
 
     #COMMANDS
@@ -45,13 +45,15 @@ class Function_Helper:
         max_cnt = 0
         image_url = None
         for image in images:
-            hit_cnt = 0
-            for key in image['keys']:
-                if key in params:
-                    hit_cnt += 1
+            if image['type'] == 'meme':
+                hit_cnt = 0
+                for key in image['keys']:
+                    if key in params:
+                        hit_cnt += 1
 
-            if  hit_cnt > max_cnt:
-                image_url = image['url']
+                #Check if enough hits and more hits than previously found image
+                if  hit_cnt >= image['required_hits'] and hit_cnt > max_cnt:
+                    image_url = image['url']
 
         #optional: read out caption for picture from library
 
@@ -61,7 +63,7 @@ class Function_Helper:
 
         #just do a google image search, lol
         developer_key = self.tokens['Google']['developer_key']
-        cx = self.tokens['Google']['custom_search1']
+        cx = self.tokens['Google']['custom_search_meme']
 
         service = build("customsearch", "v1", developerKey=developer_key)
         res = service.cse().list(
@@ -86,33 +88,150 @@ class Function_Helper:
         return ['No image with your keywords found, sorry buddy', None]
 
 
+    def get_image(self, bot, cmd, text):
+
+        #Get parameters
+        params = text.replace(cmd, '')
+
+        #search in image library for matching images
+        images = bot.image_library['images']
+        max_cnt = 0
+        image_url = None
+        for image in images:
+            hit_cnt = 0
+            for key in image['keys']:
+                if key in params:
+                    hit_cnt += 1
+
+            #Check if enough hits and more hits than previously found image
+            if  hit_cnt >= image['required_hits'] and hit_cnt > max_cnt:
+                image_url = image['url']
+
+        #optional: read out caption for picture from library
+
+        if image_url:
+            return ['', [{"fallback": "spicy meme", "image_url": image_url }]]
+
+
+        #just do a google image search, lol
+        cx = self.tokens['Google']['custom_search_meme']
+        link = self.image_search(cx, params)
+
+        if link:
+            return ['', [{"fallback": "spicy meme", "image_url": link }]]
+        else:
+            return ['No image with your keywords found, sorry buddy', None]
+
+
+
+
+    def image_search(self, cx, keywords):
+
+        developer_key = self.tokens['Google']['developer_key']
+        cx = self.tokens['Google']['custom_search_meme']
+
+        service = build("customsearch", "v1", developerKey=developer_key)
+        res = service.cse().list(
+            q=keywords,
+            cx=cx,
+            searchType='image',
+            num=1,
+            #imgType='clipart',
+            #fileType='png',
+            safe= 'off'
+        ).execute()
+
+        if 'items' in res:
+            items = res.get('items')
+            item = items[0]
+            link = item.get('link')
+
+            return link
+
+        else:
+            return None
+
+
     def teach_reaction(self, bot, cmd, text):
 
         #Get parameters
-        param = text.replace(cmd, '')
-        #params = text.split(' ')
+        # param = text.replace(cmd, '')
+        # #params = text.split(' ')
+        #
+        # #try to parse
+        # try:
+        #     reaction_obj = json.loads(param)
+        #
+        # except Exception as e:
+        #     print(e)
+        #     return ['Parameter is not a valid reaction object', None]
+        #
+        # #print('parsed')
+        #
+        # #check basic structure
+        # for key in ['matches', 'responses']:
+        #     if not key in reaction_obj.keys():
+        #         #print(key)
+        #         return ['Parameter is not a valid reaction object', None]
 
-        #try to parse
+
+        params = text.replace(cmd, '')
+        params = params.strip()
+
+        #Read arguments
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--tags', '-t')
+        parser.add_argument('--required-hits', '-rh')
+        parser.add_argument('--responses', '-r')
+
+        #help_text = 'View weather for a location\n\nParameters:\n\nRequired:\n-z, --zip\tPostcode/Zipcode\nor\n-c, --city\tCity name\n\nOptional:\n-t, --type\tSupply forecast for n day forecast\n-d, --days\tAmount of days forecast (up to 5)'
+        help_text = 'Wrong usage'
+
         try:
-            reaction_obj = json.loads(param)
+            namespace_object = parser.parse_args(params.split())
+            print(namespace_object)
 
-        except Exception as e:
-            print(e)
-            return ['Parameter is not a valid reaction object', None]
+        #Prevents parser from exiting script
+        except SystemExit:
+            return [help_text, None]
 
-        #print('parsed')
+        #Check if all supplied
+        if not namespace_object.tags or not namespace_object.required-hits or not namespace_object.responses:
+            return [help_text, None]
 
-        #check basic structure
-        for key in ['matches', 'responses']:
-            if not key in reaction_obj.keys():
-                #print(key)
-                return ['Parameter is not a valid reaction object', None]
+        #Clean
+        keys = namespace_object.tags.split(',')
+        keys = [key.strip() for key in keys]
+
+        try:
+            required_hits = int(namespace_object.required-hits)
+        except ValueError as e:
+            return [help_text, None]
+
+        responses = namespace_object.responses.split(',')
+        responses = [key.strip() for response in responses]
+
+
+        #Build json
+        reaction = {}
+        reaction.matches = [{
+            "keys": keys,
+            "required_hits": required_hits,
+            "type": "key"
+        }],
+        reaction.responses = {
+            "default": {
+                "values": responses,
+                "type": "text"
+            }
+        }
+
 
         #generate uuid
         obj_uuid = str(uuid.uuid4())
 
         reactions = bot.text_conf['reactions']
-        reactions[obj_uuid] = reaction_obj
+        reactions[obj_uuid] = reaction
 
         #save json file
         with open(bot.text_conf_location, 'w') as f:
@@ -205,7 +324,7 @@ class Function_Helper:
 
         url = base_url + endpoint + '?' + dest + '&units=metric&APPID=' + api_key
         print(url)
-        
+
 
         #Api request
         response = requests.get(url)

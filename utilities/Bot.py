@@ -36,7 +36,7 @@ class Bot:
     image_library = None
 
 
-    def __init__(self, bot_name, token, language='en', default_channel='#allgemein', home_dir=None):
+    def __init__(self, bot_name, token, language='en', default_channel='#random', home_dir=None):
 
         #Check os
         running_on = platform.system()
@@ -250,7 +250,7 @@ class Bot:
 
 
     def clean_message(self, message):
-    
+
         #remove unwanted characters
         replace_list = ['.', ',', '!', '?']
         for c in replace_list:

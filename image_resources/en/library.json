@@ -9,6 +9,8 @@
         "darth",
         "plagueis"
       ],
+      "required_hits": 2,
+      "type": "meme",
       "url": "https://i.imgflip.com/1qqazl.jpg"
     },
     {
@@ -18,6 +20,8 @@
         "coarse",
         "rough"
       ],
+      "required_hits": 2,
+      "type": "meme",
       "url": "https://i.kym-cdn.com/entries/icons/facebook/000/022/688/sandicon.jpg"
     },
     {
@@ -27,6 +31,8 @@
         "ewan mcgregor",
         "boss"
       ],
+      "required_hits": 2,
+      "type": "meme",
       "url": "http://pinthisstar.com/images/ewan-mcgregor-star-wars-5.jpg"
     },
     {
@@ -34,6 +40,8 @@
         "impossible",
         "not true"
       ],
+      "required_hits": 2,
+      "type": "meme",
       "url": "http://i.imgur.com/W1cKiB0.gif"
     },
     {
@@ -41,15 +49,19 @@
         "destroy the sith",
         "balance to the force"
       ],
+      "required_hits": 1,
+      "type": "meme",
       "url": "https://thumbs.gfycat.com/BountifulHighlevelAustralianshelduck-size_restricted.gif"
     },
     {
       "keys": [
         "just your opinion",
         "dude",
-        "like your opinion",
+        "your opinion",
         "just like"
       ],
+      "required_hits": 2,
+      "type": "meme",
       "url": "https://images.angelpub.com/2017/17/43589/the-dude.jpg"
     },
     {
@@ -58,6 +70,8 @@
         "not listening",
         "sorry i wasnt listening"
       ],
+      "required_hits": 2,
+      "type": "meme",
       "url": "http://s.quickmeme.com/img/5c/5cca245e4624bb30e6ce8459f75a625e4c1140b6dc217a6272db941720f29c67.jpg"
     },
     {
@@ -67,6 +81,8 @@
         "whats this",
         "bullshit"
       ],
+      "required_hits": 2,
+      "type": "meme",
       "url": "https://dudeism.com/wp-content/uploads/2014/07/Whats-This-Bullshit.jpg"
     }
   ]
