@@ -196,17 +196,17 @@ class Function_Helper:
             return [help_text, None]
 
         #Check if all supplied
-        if not namespace_object.tags or not namespace_object.required-hits or not namespace_object.responses:
+        if not namespace_object.tags or not namespace_object.required_hits or not namespace_object.responses:
             return [help_text, None]
 
         #Clean
         #keys = namespace_object.tags.split(',')
         #keys = [key.strip() for key in keys]
         keys = namespace_object.tags.join().split(',')
-
+        print(keys)
         
         try:
-            required_hits = int(namespace_object.required-hits)
+            required_hits = int(namespace_object.required_hits)
         except ValueError as e:
             return [help_text, None]
 
