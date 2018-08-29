@@ -203,8 +203,9 @@ class Function_Helper:
         #keys = namespace_object.tags.split(',')
         #keys = [key.strip() for key in keys]
         keys = ' '.join(namespace_object.tags).split(',')
+        keys = [key.strip() for key in keys]
         print(keys)
-        
+
         try:
             required_hits = int(namespace_object.required_hits)
         except ValueError as e:
@@ -213,15 +214,15 @@ class Function_Helper:
         #responses = namespace_object.responses.split(',')
         #responses = [key.strip() for response in responses]
         responses = ' '.join(namespace_object.responses).split(',')
+        responses = [response.strip() for response in responses]
 
-        
         #Build json
         reaction = {}
         reaction['matches'] = [{
             "keys": keys,
             "required_hits": required_hits,
             "type": "key"
-        }],
+        }]
         reaction['responses'] = {
             "default": {
                 "values": responses,
