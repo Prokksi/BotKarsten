@@ -217,12 +217,12 @@ class Function_Helper:
         
         #Build json
         reaction = {}
-        reaction.matches = [{
+        reaction['matches'] = [{
             "keys": keys,
             "required_hits": required_hits,
             "type": "key"
         }],
-        reaction.responses = {
+        reaction['responses'] = {
             "default": {
                 "values": responses,
                 "type": "text"
