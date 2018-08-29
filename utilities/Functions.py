@@ -199,10 +199,10 @@ class Function_Helper:
         if not namespace_object.tags or not namespace_object.required-hits or not namespace_object.responses:
             return [help_text, None]
 
-	#Clean
-	#keys = namespace_object.tags.split(',')
-	#keys = [key.strip() for key in keys]
-	keys = namespace_object.tags
+        #Clean
+        #keys = namespace_object.tags.split(',')
+        #keys = [key.strip() for key in keys]
+        keys = namespace_object.tags
 
         
         try:
@@ -212,8 +212,9 @@ class Function_Helper:
 
         #responses = namespace_object.responses.split(',')
         #responses = [key.strip() for response in responses]
-	responses = namespace_object.responses
+        responses = namespace_object.responses
 
+        
         #Build json
         reaction = {}
         reaction.matches = [{
