@@ -199,10 +199,11 @@ class Function_Helper:
         if not namespace_object.tags or not namespace_object.required-hits or not namespace_object.responses:
             return [help_text, None]
 
-        #Clean
+        
         keys = namespace_object.tags.split(',')
         keys = [key.strip() for key in keys]
 
+        
         try:
             required_hits = int(namespace_object.required-hits)
         except ValueError as e:
