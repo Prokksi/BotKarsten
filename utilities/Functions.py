@@ -180,9 +180,9 @@ class Function_Helper:
 
         #Read arguments
         parser = argparse.ArgumentParser()
-        parser.add_argument('--tags', '-t')
+        parser.add_argument('--tags', '-t', nargs='+')
         parser.add_argument('--required-hits', '-rh')
-        parser.add_argument('--responses', '-r')
+        parser.add_argument('--responses', '-r', nargs='+')
 
         #help_text = 'View weather for a location\n\nParameters:\n\nRequired:\n-z, --zip\tPostcode/Zipcode\nor\n-c, --city\tCity name\n\nOptional:\n-t, --type\tSupply forecast for n day forecast\n-d, --days\tAmount of days forecast (up to 5)'
         help_text = 'Wrong usage'
@@ -199,9 +199,10 @@ class Function_Helper:
         if not namespace_object.tags or not namespace_object.required-hits or not namespace_object.responses:
             return [help_text, None]
 
-        
-        keys = namespace_object.tags.split(',')
-        keys = [key.strip() for key in keys]
+	#Clean
+	#keys = namespace_object.tags.split(',')
+	#keys = [key.strip() for key in keys]
+	keys = namespace_object.tags
 
         
         try:
@@ -209,9 +210,9 @@ class Function_Helper:
         except ValueError as e:
             return [help_text, None]
 
-        responses = namespace_object.responses.split(',')
-        responses = [key.strip() for response in responses]
-
+        #responses = namespace_object.responses.split(',')
+        #responses = [key.strip() for response in responses]
+	responses = namespace_object.responses
 
         #Build json
         reaction = {}
