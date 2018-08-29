@@ -202,7 +202,7 @@ class Function_Helper:
         #Clean
         #keys = namespace_object.tags.split(',')
         #keys = [key.strip() for key in keys]
-        keys = namespace_object.tags
+        keys = namespace_object.tags.join().split(',')
 
         
         try:
