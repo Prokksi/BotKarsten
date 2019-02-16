@@ -94,8 +94,7 @@ class Bot:
                 #print(own_user_id)
                 break
         else:
-            print('Error: Bot user not in members')
-            sys.exit(1)
+            raise Exception('Connecting failed: Bot user not in members')
 
         self.OWN_USER_ID = own_user_id
 
@@ -111,8 +110,7 @@ class Bot:
     def listen(self, all_messages=False):
 
         if not self.slack_connection:
-            print('Error: No slack connection established')
-            sys.exit(1)
+            raise Exception('Listening failed: No slack connection established')
 
         sc = self.slack_connection
 
@@ -129,8 +127,7 @@ class Bot:
                     type = msg['type']
 
                     if type != 'hello':
-                        print('Error: RTM connection failed')
-                        sys.exit(1)
+                        raise Exception('Listening failed: RTM connection failed')
 
                     print('RTM connection successful!')
                     break

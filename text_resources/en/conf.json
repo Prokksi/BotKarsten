@@ -1,1 +1,288 @@
-{"reactions": {"dummy": {"matches": [{"keys": ["hello there"], "type": "exact"}], "responses": {"default": {"type": "text", "values": ["General Kenobi..."]}}}, "55ec4374-70cf-4234-9389-bfea8a1e60da": {"matches": [{"pattern": "give image", "type": "command"}], "responses": {"default": {"function": "get_image", "type": "action"}}}, "f53f74bd-4ac6-484e-8d07-52c018e8b78b": {"matches": [{"keys": ["who are you", "what are you"], "type": "key", "required_hits": 1}], "responses": {"default": {"type": "text", "values": ["I'm just a simple bot"]}}}, "dummy42": {"matches": [{"keys": ["did you ever hear the tragedy of darth plagueis the wise"], "type": "exact"}, {"keys": ["plagueis", "tragedy", "wise", "darth"], "type": "key", "required_hits": 2}], "responses": {"default": {"values": ["Did you ever hear the tragedy of Darth Plagueis the wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic, he could save others from death, but not himself."], "type": "text"}}}, "01da77cf-5c86-4982-82c4-0e7f680cbab6": {"matches": [{"keys": ["i have the high ground"], "type": "exact"}], "responses": {"default": {"values": ["You are underestimating my powers"], "type": "text"}}}, "01da77cf-5c86-4982-82c4-0e7f680cbab1": {"matches": [{"pattern": "weather", "type": "command"}], "responses": {"default": {"function": "find_weather", "type": "action"}}}, "dummy3": {"matches": [{"keys": ["raspberry", "pi"], "must_hit": ["shutdown"], "type": "key", "required_hits": 1}, {"keys": ["shutdown raspberrypi now"], "type": "exact"}], "responses": {"default": {"function": "self_shutdown", "type": "action"}}}, "dummy2": {"matches": [{"keys": ["hi", "hello", "greetings", "yo", "meddl", "hey"], "type": "key", "required_hits": 1}], "responses": {"default": {"type": "text", "values": ["Hi there USERNAME", "Hey ho USERNAME", "Meddl", "Hello USERNAME"]}, "UBJEP0YLS": {"type": "text", "values": ["Nice to see you, dude"]}}}, "f18e1891-7db0-4fb1-aaf4-875d62e101af": {"matches": [{"pattern": "give subreddit", "type": "command"}], "responses": {"default": {"function": "give_subreddit", "type": "action"}}}, "dummy6": {"matches": [{"pattern": "teach reaction", "type": "command"}], "responses": {"default": {"function": "teach_reaction", "type": "action"}}}, "dummy7": {"matches": [{"pattern": "save meme", "type": "command"}], "responses": {"default": {"function": "save_meme", "type": "action"}}}, "dummy4": {"matches": [{"keys": ["Marco"], "type": "exact"}], "responses": {"default": {"type": "text", "values": ["Polo"]}}}, "dummy5": {"matches": [{"pattern": "give meme", "type": "command"}], "responses": {"default": {"function": "get_meme", "type": "action"}}}}, "no_reaction": ["Sorry, I do not understand :/"], "greetings": ["Meddl Loide", "It's just me, Karsten", "AND HIS NAME IS KARSTEN", "Guten Morgen Herr Nachbar", "Hello, Friends"]}
+{
+    "reactions": {
+        "dummy": {
+            "matches": [
+                {
+                    "keys": [
+                        "hello there"
+                    ],
+                    "type": "exact"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "type": "text",
+                    "values": [
+                        "General Kenobi..."
+                    ]
+                }
+            }
+        },
+        "01da77cf-5c87-4982-86c4-0e7f680cbab6": {
+            "matches": [
+                {
+                    "pattern": "list commands",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default":{
+                    "function": "list_commands",
+                    "type": "action"
+                }
+            }
+        },
+        "01da77cf-5c86-4982-86c4-0e7f680cbab6": {
+            "matches": [
+                {
+                    "pattern": "google",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default":{
+                    "function": "google",
+                    "type": "action"
+                }
+            }
+        },
+        "55ec4374-70cf-4234-9389-bfea8a1e60da": {
+            "matches": [
+                {
+                    "pattern": "give image",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "function": "get_image",
+                    "type": "action"
+                }
+            }
+        },
+        "f53f74bd-4ac6-484e-8d07-52c018e8b78b": {
+            "matches": [
+                {
+                    "keys": [
+                        "who are you",
+                        "what are you"
+                    ],
+                    "type": "key",
+                    "required_hits": 1
+                }
+            ],
+            "responses": {
+                "default": {
+                    "type": "text",
+                    "values": [
+                        "I'm just a simple bot"
+                    ]
+                }
+            }
+        },
+        "dummy42": {
+            "matches": [
+                {
+                    "keys": [
+                        "did you ever hear the tragedy of darth plagueis the wise"
+                    ],
+                    "type": "exact"
+                },
+                {
+                    "keys": [
+                        "plagueis",
+                        "tragedy",
+                        "wise",
+                        "darth"
+                    ],
+                    "type": "key",
+                    "required_hits": 2
+                }
+            ],
+            "responses": {
+                "default": {
+                    "values": [
+                        "Did you ever hear the tragedy of Darth Plagueis the wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic, he could save others from death, but not himself."
+                    ],
+                    "type": "text"
+                }
+            }
+        },
+        "01da77cf-5c86-4982-82c4-0e7f680cbab6": {
+            "matches": [
+                {
+                    "keys": [
+                        "i have the high ground"
+                    ],
+                    "type": "exact"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "values": [
+                        "You are underestimating my powers"
+                    ],
+                    "type": "text"
+                }
+            }
+        },
+        "01da77cf-5c86-4982-82c4-0e7f680cbab1": {
+            "matches": [
+                {
+                    "pattern": "weather",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "function": "find_weather",
+                    "type": "action"
+                }
+            }
+        },
+        "dummy3": {
+            "matches": [
+                {
+                    "keys": [
+                        "raspberry",
+                        "pi"
+                    ],
+                    "must_hit": [
+                        "shutdown"
+                    ],
+                    "type": "key",
+                    "required_hits": 1
+                },
+                {
+                    "keys": [
+                        "shutdown raspberrypi now"
+                    ],
+                    "type": "exact"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "function": "self_shutdown",
+                    "type": "action"
+                }
+            }
+        },
+        "dummy2": {
+            "matches": [
+                {
+                    "keys": [
+                        "hi",
+                        "hello",
+                        "greetings",
+                        "yo",
+                        "meddl",
+                        "hey"
+                    ],
+                    "type": "key",
+                    "required_hits": 1
+                }
+            ],
+            "responses": {
+                "default": {
+                    "type": "text",
+                    "values": [
+                        "Hi there USERNAME",
+                        "Hey ho USERNAME",
+                        "Meddl",
+                        "Hello USERNAME"
+                    ]
+                },
+                "UBJEP0YLS": {
+                    "type": "text",
+                    "values": [
+                        "Nice to see you, dude"
+                    ]
+                }
+            }
+        },
+        "f18e1891-7db0-4fb1-aaf4-875d62e101af": {
+            "matches": [
+                {
+                    "pattern": "give subreddit",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "function": "give_subreddit",
+                    "type": "action"
+                }
+            }
+        },
+        "dummy6": {
+            "matches": [
+                {
+                    "pattern": "teach reaction",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "function": "teach_reaction",
+                    "type": "action"
+                }
+            }
+        },
+        "dummy7": {
+            "matches": [
+                {
+                    "pattern": "save meme",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "function": "save_meme",
+                    "type": "action"
+                }
+            }
+        },
+        "dummy4": {
+            "matches": [
+                {
+                    "keys": [
+                        "Marco"
+                    ],
+                    "type": "exact"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "type": "text",
+                    "values": [
+                        "Polo"
+                    ]
+                }
+            }
+        },
+        "dummy5": {
+            "matches": [
+                {
+                    "pattern": "give meme",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default": {
+                    "function": "get_meme",
+                    "type": "action"
+                }
+            }
+        }
+    },
+    "no_reaction": [
+        "Sorry, I do not understand :/"
+    ],
+    "greetings": [
+        "Meddl Loide",
+        "It's just me, Karsten",
+        "AND HIS NAME IS KARSTEN",
+        "Guten Morgen Herr Nachbar",
+        "Hello, Friends"
+    ]
+}

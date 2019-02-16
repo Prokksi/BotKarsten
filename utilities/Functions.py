@@ -19,6 +19,7 @@ class Function_Helper:
 
         self.tokens = tokens
 
+        self.searcher = Google_Searcher()
 
 
     #define custom functions in here
@@ -60,32 +61,15 @@ class Function_Helper:
         if image_url:
             return ['', [{"fallback": "spicy meme", "image_url": image_url }]]
 
-
         #just do a google image search, lol
-        developer_key = self.tokens['Google']['developer_key']
-        cx = self.tokens['Google']['custom_search_meme']
+        link = self.searcher.search('custom_search_meme', params, search_type='image')
 
-        service = build("customsearch", "v1", developerKey=developer_key)
-        res = service.cse().list(
-            q=params,
-            cx=cx,
-            searchType='image',
-            num=1,
-            #imgType='clipart',
-            #fileType='png',
-            safe= 'off'
-        ).execute()
-
-        if 'items' in res:
-            items = res.get('items')
-            item = items[0]
-            link = item.get('link')
-
+        if link:
             return ['', [{"fallback": "spicy meme", "image_url": link }]]
-
 
         #Well, when nothong helps, do this
         return ['No image with your keywords found, sorry buddy', None]
+
 
 
     def get_image(self, bot, cmd, text):
@@ -114,8 +98,9 @@ class Function_Helper:
 
 
         #just do a google image search, lol
-        cx = self.tokens['Google']['custom_search_meme']
-        link = self.image_search(cx, params)
+        link = self.searcher.search('custom_search_images', params, search_type='image')
+        print(link)
+
 
         if link:
             return ['', [{"fallback": "spicy meme", "image_url": link }]]
@@ -124,32 +109,40 @@ class Function_Helper:
 
 
 
+    def google(self, bot, cmd, text):
 
-    def image_search(self, cx, keywords):
+        #Get parameters
+        params = text.replace(cmd, '')
 
-        developer_key = self.tokens['Google']['developer_key']
-        cx = self.tokens['Google']['custom_search_meme']
+        parser = argparse.ArgumentParser()
+        parser.add_argument('keywords', nargs='*')
+        parser.add_argument('--number', '-n', nargs='?', default=1)
 
-        service = build("customsearch", "v1", developerKey=developer_key)
-        res = service.cse().list(
-            q=keywords,
-            cx=cx,
-            searchType='image',
-            num=1,
-            #imgType='clipart',
-            #fileType='png',
-            safe= 'off'
-        ).execute()
+        help_text = 'Wrong usage'
 
-        if 'items' in res:
-            items = res.get('items')
-            item = items[0]
-            link = item.get('link')
+        try:
+            namespace_object = parser.parse_args(params.split())
+            print(namespace_object)
 
-            return link
+        #Prevents parser from exiting script
+        except SystemExit:
+            return [help_text, None]
 
-        else:
-            return None
+        
+        num = namespace_object.number
+        keywords = ' '.join(namespace_object.keywords)
+    
+        #Perform google search
+        links = self.searcher.search('custom_search_full', keywords, num_results=num)
+
+
+        if links:
+            return [links, None]
+        
+        return ['Nothing found', None]
+
+
+
 
 
     def teach_reaction(self, bot, cmd, text):
@@ -208,7 +201,7 @@ class Function_Helper:
 
         try:
             required_hits = int(namespace_object.required_hits)
-        except ValueError as e:
+        except ValueError:
             return [help_text, None]
 
         #responses = namespace_object.responses.split(',')
@@ -276,6 +269,20 @@ class Function_Helper:
             json.dump(bot.image_library, f)
 
         return ['Image successfully added', None]
+
+
+    def list_commands(self, bot, cmd, text):
+
+        reactions = bot.text_conf['reactions']
+
+        command_list = list()
+        for reaction in reactions.values():
+            for match in reaction.get('matches'):
+                if match.get('type') == 'command':
+                    command_list.append(match.get('pattern'))
+
+        return [', '.join(command_list), None]
+
 
 
     def give_subreddit(self, bot, cmd, text):
@@ -371,3 +378,44 @@ class Function_Helper:
                 text += 'Max Temperature: ' + str(entry['main']['temp_max']) + '\n\n'
 
         return [text, None]
+
+
+class Google_Searcher():
+
+    service = None
+
+    def __init__(self):
+        
+        tokens = ConfigParser()
+        tokens.read('config/tokens.ini')
+
+        self.tokens = tokens
+
+
+    def search(self, search_engine, keywords, search_type=None, num_results=1):
+
+        if self.service is None:
+            developer_key = self.tokens['Google']['developer_key']
+            self.service = build("customsearch", "v1", developerKey=developer_key)
+
+        cx = self.tokens['Google'][search_engine]
+    
+        res = self.service.cse().list(
+            q=keywords,
+            cx=cx,
+            num=num_results,
+            searchType=search_type,
+            safe='off'
+        ).execute()
+
+        
+        if 'items' in res.keys():
+            items = res.get('items')
+            
+            links = ''
+            for item in items:
+                links += item.get('link') + '\n'
+            
+            return links
+        
+        return None
