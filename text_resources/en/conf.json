@@ -18,6 +18,34 @@
                 }
             }
         },
+        "01db77cf-5c87-4982-86c4-0e7f680cbab6": {
+            "matches": [
+                {
+                    "pattern": "list issues",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default":{
+                    "function": "get_issues",
+                    "type": "action"
+                }
+            }
+        },
+        "81db77cf-5c87-4982-86c4-0e7f680cbab6": {
+            "matches": [
+                {
+                    "pattern": "assign user",
+                    "type": "command"
+                }
+            ],
+            "responses": {
+                "default":{
+                    "function": "assign_user",
+                    "type": "action"
+                }
+            }
+        },
         "01da77cf-5c87-4982-86c4-0e7f680cbab6": {
             "matches": [
                 {

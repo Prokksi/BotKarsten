@@ -6,6 +6,7 @@ from configparser import ConfigParser
 import requests
 import argparse
 import time
+import gitlab
 
 class Function_Helper:
 
@@ -20,7 +21,7 @@ class Function_Helper:
         self.tokens = tokens
 
         self.searcher = Google_Searcher()
-
+        self.gc = Gitlab_Connector()
 
     #define custom functions in here
 
@@ -380,6 +381,17 @@ class Function_Helper:
         return [text, None]
 
 
+    def get_issues(self, bot, cmd, text):
+        issues = self.gc.get_issues()
+        return [issues, None]
+    
+    def assign_user(self, bot, cmd, text):
+        params = text.replace(cmd, '')
+        params = params.strip()
+        user, iid = params.split()
+        self.gc.assign_user(user, iid)
+
+
 class Google_Searcher():
 
     service = None
@@ -419,3 +431,67 @@ class Google_Searcher():
             return links
         
         return None
+
+
+class Gitlab_Connector():
+
+    connection = None
+    project = None
+
+    def __init__(self):
+
+        tokens = ConfigParser()
+        tokens.read('config/tokens.ini')
+
+        self.tokens = tokens
+    
+    def _connect(self):
+
+        url = self.tokens['Gitlab']['url']
+        project_id = self.tokens['Gitlab']['project_id']
+        api_key = self.tokens['Gitlab']['api_key']
+
+        self.connection = gitlab.Gitlab(url, private_token=api_key)
+        self.project = self.connection.projects.get(project_id, lazy=True)
+
+
+    def _get_user(self, name):
+        user = self.connection.users.list(username=name)
+        return user[0].attributes
+
+    
+    def get_issues(self):
+
+        if self.connection is None:
+            self._connect()
+        
+        #issues = self.connection.issues.list(all=True)
+        #projects = self.connection.projects.list()
+
+        issues = self.project.issues.list(state='opened', all=True)
+
+        res = ''
+        for issue in issues:
+            #print(project)
+            #print(issue.attributes.get('title'))
+            #print(issue.attributes.get('id'))
+            res += '#' + str(issue.attributes.get('iid')) + ' ' + issue.attributes.get('title') + ' (>' + issue.attributes.get('web_url') + ')\n'
+
+        #print(issues)
+
+        #issues = str(issues[0].id)
+
+        return res
+
+
+    def assign_user(self, username, iid):
+
+        if self.connection is None:
+            self._connect()
+
+        user = self._get_user(username)
+        issue = self.project.issues.get(iid, lazy=True)
+        issue.assignee = user
+        issue.save()
+
+        print(user)
