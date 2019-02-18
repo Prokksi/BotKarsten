@@ -36,6 +36,40 @@ class Function_Helper:
 
     #COMMANDS
 
+
+
+    def print_help(self, bot, cmd, text):
+        params = text.replace(cmd, '')
+        params = params.strip()
+
+        reactions = bot.text_conf['reactions']
+
+        if params == '':
+            #Get own helptext
+            helptext = get_helptext(reactions, 'help')
+            usage = '\nUsage: '
+            return [helptext, None]
+        
+        else:
+            #Get helptext of command
+            helptext = get_helptext(reactions, params)
+            return [helptext, None]
+
+
+
+    def list_commands(self, bot, cmd, text):
+
+        reactions = bot.text_conf['reactions']
+
+        command_list = list()
+        for reaction in reactions.values():
+            for match in reaction.get('matches'):
+                if match.get('type') == 'command':
+                    command_list.append(match.get('pattern'))
+
+        return [', '.join(command_list), None]
+
+
     def get_meme(self, bot, cmd, text):
 
         #Get parameters
@@ -272,19 +306,6 @@ class Function_Helper:
         return ['Image successfully added', None]
 
 
-    def list_commands(self, bot, cmd, text):
-
-        reactions = bot.text_conf['reactions']
-
-        command_list = list()
-        for reaction in reactions.values():
-            for match in reaction.get('matches'):
-                if match.get('type') == 'command':
-                    command_list.append(match.get('pattern'))
-
-        return [', '.join(command_list), None]
-
-
 
     def give_subreddit(self, bot, cmd, text):
 
@@ -381,15 +402,34 @@ class Function_Helper:
         return [text, None]
 
 
+    #Gitlab wrapper
+
     def get_issues(self, bot, cmd, text):
         issues = self.gc.get_issues()
         return [issues, None]
+
+    def get_users(self, bot, cmd, text):
+        users = self.gc.get_users()
+        return [users, None]
     
     def assign_user(self, bot, cmd, text):
         params = text.replace(cmd, '')
         params = params.strip()
-        user, iid = params.split()
-        self.gc.assign_user(user, iid)
+        parts = params.split()
+
+        if len(parts) == 2:
+            #Only relevant information
+            user, iid = parts
+        elif len(parts) == 3:
+            #Remove linkage word
+            user, _, iid = parts
+        else:
+            return ['Wrong amount of parameters. Check \'help assign user\'.', None]
+
+        msg = self.gc.assign_user(user, iid)
+
+        return [msg, None]
+
 
 
 class Google_Searcher():
@@ -457,7 +497,19 @@ class Gitlab_Connector():
 
     def _get_user(self, name):
         user = self.connection.users.list(username=name)
-        return user[0].attributes
+        if len(user) == 0:
+            return None
+
+        return user[0]
+
+
+    def get_users(self):
+        users = self.connection.users.list(all=True)
+        res = ''
+        for user in users:
+            res += user.attributes.get('username') + '\n'
+
+        return res
 
     
     def get_issues(self):
@@ -465,21 +517,14 @@ class Gitlab_Connector():
         if self.connection is None:
             self._connect()
         
-        #issues = self.connection.issues.list(all=True)
-        #projects = self.connection.projects.list()
-
         issues = self.project.issues.list(state='opened', all=True)
 
         res = ''
         for issue in issues:
-            #print(project)
-            #print(issue.attributes.get('title'))
-            #print(issue.attributes.get('id'))
-            res += '#' + str(issue.attributes.get('iid')) + ' ' + issue.attributes.get('title') + ' (>' + issue.attributes.get('web_url') + ')\n'
-
-        #print(issues)
-
-        #issues = str(issues[0].id)
+            iid = issue.attributes.get('iid')
+            title = issue.attributes.get('title')
+            url = issue.attributes.get('web_url')
+            res += '#' + str(iid) + ' ' + title + ' (' + url + ')\n'
 
         return res
 
@@ -490,8 +535,31 @@ class Gitlab_Connector():
             self._connect()
 
         user = self._get_user(username)
-        issue = self.project.issues.get(iid, lazy=True)
-        issue.assignee = user
+        if user is None:
+            return 'No user with name ' + username + ' found.'
+  
+        try:
+            issue = self.project.issues.get(iid, lazy=True)
+
+        except gitlab.exceptions.GitlabGetError as e:
+            return 'Issue with id ' + iid + ' not found.'
+        
+        issue.assignee_id = user.id
         issue.save()
 
-        print(user)
+        return 'Successfully assigned ' + username + ' to issue ' + str(iid) + '.'
+
+
+
+#Utils
+
+def get_helptext(reactions, command):
+        for reaction in reactions.values():
+            for match in reaction.get('matches'):
+                if match.get('command') == command:
+                    if 'helptext' in match.keys():
+                        return match.get('helptext') + '\n\nUsage: ' + match.get('pattern')
+                    else:
+                        return 'No help available'
+        
+        return 'Could not find specified command'

@@ -18,11 +18,45 @@
                 }
             }
         },
-        "01db77cf-5c87-4982-86c4-0e7f680cbab6": {
+        "55ed4974-70cf-4234-9389-bfea8a1e60da": {
             "matches": [
                 {
+                    "command": "help",
+                    "pattern": "help [command]",
+                    "type": "command",
+                    "helptext": "Print help for specified command"
+                }
+            ],
+            "responses": {
+                "default":{
+                    "function": "print_help",
+                    "type": "action"
+                }
+            }
+        },
+        "55ec4974-70cf-4234-9389-bfea8a1e60da": {
+            "matches": [
+                {
+                    "command": "list users",
+                    "pattern": "list users",
+                    "type": "command",
+                    "helptext": "List all gitlab users"
+                }
+            ],
+            "responses": {
+                "default":{
+                    "function": "get_users",
+                    "type": "action"
+                }
+            }
+        },
+        "01db77cf-5c87-4982-86c4-0e7f680cbab6": {
+            "matches": [
+                {   
+                    "command": "list issues",
                     "pattern": "list issues",
-                    "type": "command"
+                    "type": "command",
+                    "helptext": "List all open gitlab issues"
                 }
             ],
             "responses": {
@@ -35,8 +69,10 @@
         "81db77cf-5c87-4982-86c4-0e7f680cbab6": {
             "matches": [
                 {
-                    "pattern": "assign user",
-                    "type": "command"
+                    "command": "assign user",
+                    "pattern": "assign user <username> [to] <issue>",
+                    "type": "command",
+                    "helptext": "Assign user to gitlab issue"
                 }
             ],
             "responses": {
@@ -49,6 +85,7 @@
         "01da77cf-5c87-4982-86c4-0e7f680cbab6": {
             "matches": [
                 {
+                    "command": "list commands",
                     "pattern": "list commands",
                     "type": "command"
                 }
@@ -63,8 +100,10 @@
         "01da77cf-5c86-4982-86c4-0e7f680cbab6": {
             "matches": [
                 {
-                    "pattern": "google",
-                    "type": "command"
+                    "command": "google",
+                    "pattern": "google <keywords> [-n <number of results>]",
+                    "type": "command",
+                    "helptext": "Perform a google search"
                 }
             ],
             "responses": {
@@ -77,8 +116,10 @@
         "55ec4374-70cf-4234-9389-bfea8a1e60da": {
             "matches": [
                 {
+                    "command": "give image <keywords>",
                     "pattern": "give image",
-                    "type": "command"
+                    "type": "command",
+                    "help_text": "Look for images in library (if nothing is found a google image search is done)"
                 }
             ],
             "responses": {
@@ -157,6 +198,7 @@
         "01da77cf-5c86-4982-82c4-0e7f680cbab1": {
             "matches": [
                 {
+                    "command": "weather",
                     "pattern": "weather",
                     "type": "command"
                 }
@@ -231,6 +273,7 @@
         "f18e1891-7db0-4fb1-aaf4-875d62e101af": {
             "matches": [
                 {
+                    "command": "give subreddit",
                     "pattern": "give subreddit",
                     "type": "command"
                 }
@@ -245,6 +288,7 @@
         "dummy6": {
             "matches": [
                 {
+                    "command": "teach reaction",
                     "pattern": "teach reaction",
                     "type": "command"
                 }
@@ -259,6 +303,7 @@
         "dummy7": {
             "matches": [
                 {
+                    "command": "save meme",
                     "pattern": "save meme",
                     "type": "command"
                 }
@@ -291,6 +336,7 @@
         "dummy5": {
             "matches": [
                 {
+                    "command": "give meme",
                     "pattern": "give meme",
                     "type": "command"
                 }

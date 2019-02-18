@@ -1,4 +1,5 @@
 from slackclient import SlackClient
+import re
 import time
 import json
 import os
@@ -75,7 +76,7 @@ class Bot:
 
 
 
-    def connect(self, channel=None):
+    def connect(self, channel=None, silent=False):
 
         if channel is None:
             channel = self.default_channel
@@ -100,9 +101,10 @@ class Bot:
 
 
         #Hello message
-        greetings = self.text_conf['greetings']
-        text = self.get_random(greetings)
-        self.send_message(text, None, channel)
+        if not silent:
+            greetings = self.text_conf['greetings']
+            text = self._get_random(greetings)
+            self.send_message(text, None, channel)
 
         print('connected...')
 
@@ -191,7 +193,7 @@ class Bot:
                                         chosen_reaction = self.find_best_reaction(possible_reactions)
                                         response = self.trigger_reaction(chosen_reaction, user)
                                     else:
-                                        response[0] = self.get_random(self.text_conf['no_reaction'])
+                                        response[0] = self._get_random(self.text_conf['no_reaction'])
 
                                 response_text = response[0]
                                 attachments = response[1]
@@ -363,7 +365,7 @@ class Bot:
 
         if response['type'] == 'text':
             values = response['values']
-            response_text = self.get_random(values)
+            response_text = self._get_random(values)
         elif response['type'] == 'action':
             function_name = response['function']
             response_text = getattr(self.function_helper, function_name)()
@@ -396,9 +398,34 @@ class Bot:
             for match in matches:
                 if match['type'] == 'command':
                     #check if command fits
-                    if text.startswith(match['pattern']):
+                    if text.startswith(match['command']):
                         #save id
                         return reaction_id
+                    
+                    #Build regex
+                    # regex = '^' + match['command']
+                    # parts = match['pattern'].split()
+
+                    # for part in parts:
+                    #     if part == match['command']:
+                    #         continue
+                    #     if part.startswith('[') and part.endswith(']'):
+                    #         regex += ' {0,1}.*'
+                    #     else:
+                    #         regex += ' .{1,}'
+
+                    # regex += '$'
+
+                    # print(regex)
+
+                    # if re.search(regex, text) is not None:
+                    #     #save id
+                    #     return reaction_id
+
+
+                    #if re.search(match['pattern'], text) is not None:
+                        #save id
+                    #    return reaction_id
 
                     #Ignore all other matches of this reaction
                     #(only one command pattern per reaction)
@@ -416,7 +443,8 @@ class Bot:
         #get command text
         for match in reaction['matches']:
             if match['type'] == 'command':
-                cmd = match['pattern']
+                #cmd = match['pattern']
+                cmd = match['command']
                 break
 
         responses = reaction['responses']
@@ -462,5 +490,5 @@ class Bot:
         return text
 
 
-    def get_random(self, options):
+    def _get_random(self, options):
         return options[randint(0, len(options) - 1)]

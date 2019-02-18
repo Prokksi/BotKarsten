@@ -20,12 +20,12 @@ print(namespace_object)
 
 #Read bot token from config
 tokens = ConfigParser()
-tokens.read('config/tokens.ini')
+tokens.read('./config/tokens.ini')
 bot_token = tokens['Slack'][namespace_object.token]
 
 #Create bot
 bot_karsten = Bot('bot_karsten', bot_token, default_channel='#random')
-bot_karsten.connect()
+bot_karsten.connect(silent=True)
 
 #Start
 bot_karsten.listen()
